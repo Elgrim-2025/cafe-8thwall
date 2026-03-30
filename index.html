@@ -12,43 +12,33 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ── 탭 힌트 버튼 ── */
-    #tap-hint {
+    /* ── 안내 토스트 ── */
+    #guide-toast {
       position: fixed;
-      bottom: 110px;
+      bottom: 120px;
       left: 50%;
       transform: translateX(-50%);
-      display: none;
-      align-items: center;
-      gap: 8px;
-      background: rgba(33, 58, 127, 0.92);
-      border: 2px solid #FFD700;
-      color: #FFD700;
-      padding: 12px 26px;
+      background: rgba(15, 25, 60, 0.88);
+      border: 1.5px solid rgba(255, 215, 0, 0.6);
+      color: #fff;
+      padding: 13px 22px;
       border-radius: 50px;
-      font-size: 14px;
+      font-size: 13px;
       font-family: -apple-system, 'Apple SD Gothic Neo', sans-serif;
-      font-weight: 700;
-      letter-spacing: 0.3px;
+      font-weight: 500;
       white-space: nowrap;
       z-index: 100;
-      cursor: pointer;
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      animation: hintGlow 2s ease-in-out infinite;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      opacity: 0;
+      transition: opacity 0.35s ease;
     }
-    @keyframes hintGlow {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(255,215,0,0.6), 0 4px 20px rgba(0,0,0,0.3); }
-      50%       { box-shadow: 0 0 0 10px rgba(255,215,0,0), 0 4px 20px rgba(0,0,0,0.3); }
-    }
-    .hint-icon {
-      font-size: 18px;
-      animation: hintBounce 1.2s ease-in-out infinite;
-    }
-    @keyframes hintBounce {
-      0%, 100% { transform: translateY(0); }
-      50%       { transform: translateY(-3px); }
-    }
+    #guide-toast.show { opacity: 1; }
+    #guide-toast .toast-icon { font-size: 16px; }
 
     /* ── 팝업 백드롭 ── */
     #popup-backdrop {
@@ -181,10 +171,10 @@
 </head>
 <body>
 
-  <!-- 탭 힌트 버튼 -->
-  <div id="tap-hint">
-    <span class="hint-icon">☕</span>
-    <span>원두 정보 보기</span>
+  <!-- 안내 토스트 -->
+  <div id="guide-toast">
+    <span class="toast-icon">☕</span>
+    <span>커피를 탭하면 원두 정보를 볼 수 있어요</span>
   </div>
 
   <!-- 팝업 백드롭 -->
