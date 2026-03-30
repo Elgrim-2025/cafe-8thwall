@@ -12,51 +12,42 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ── 골드 링 인디케이터 ── */
-    #ring-indicator {
+    /* ── 탭 힌트 버튼 ── */
+    #tap-hint {
       position: fixed;
-      display: none;
-      pointer-events: none;
-      transform: translate(-50%, -50%);
-      z-index: 100;
-    }
-    .ring-pulse {
-      position: absolute;
-      width: 96px;
-      height: 96px;
-      border: 2.5px solid #FFD700;
-      border-radius: 50%;
-      top: 0; left: 0;
-      transform: translate(-50%, -50%);
-      animation: ringPulse 1.8s ease-out infinite;
-    }
-    .ring-pulse:nth-child(2) { animation-delay: 0.6s; }
-    .ring-pulse:nth-child(3) { animation-delay: 1.2s; }
-    @keyframes ringPulse {
-      0%   { transform: translate(-50%,-50%) scale(0.35); opacity: 1; }
-      100% { transform: translate(-50%,-50%) scale(2.4);  opacity: 0; }
-    }
-    .ring-dot {
-      position: absolute;
-      width: 10px; height: 10px;
-      background: #FFD700;
-      border-radius: 50%;
-      top: 0; left: 0;
-      transform: translate(-50%, -50%);
-      box-shadow: 0 0 8px #FFD700;
-    }
-    .ring-label {
-      position: absolute;
-      top: 56px;
+      bottom: 110px;
       left: 50%;
       transform: translateX(-50%);
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: rgba(33, 58, 127, 0.92);
+      border: 2px solid #FFD700;
       color: #FFD700;
-      font-size: 11px;
-      font-family: -apple-system, sans-serif;
-      white-space: nowrap;
+      padding: 12px 26px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-family: -apple-system, 'Apple SD Gothic Neo', sans-serif;
       font-weight: 700;
-      letter-spacing: 0.5px;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.9);
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+      z-index: 100;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      animation: hintGlow 2s ease-in-out infinite;
+    }
+    @keyframes hintGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255,215,0,0.6), 0 4px 20px rgba(0,0,0,0.3); }
+      50%       { box-shadow: 0 0 0 10px rgba(255,215,0,0), 0 4px 20px rgba(0,0,0,0.3); }
+    }
+    .hint-icon {
+      font-size: 18px;
+      animation: hintBounce 1.2s ease-in-out infinite;
+    }
+    @keyframes hintBounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-3px); }
     }
 
     /* ── 팝업 백드롭 ── */
@@ -190,13 +181,10 @@
 </head>
 <body>
 
-  <!-- 골드 링 인디케이터 -->
-  <div id="ring-indicator">
-    <div class="ring-pulse"></div>
-    <div class="ring-pulse"></div>
-    <div class="ring-pulse"></div>
-    <div class="ring-dot"></div>
-    <span class="ring-label">탭하세요</span>
+  <!-- 탭 힌트 버튼 -->
+  <div id="tap-hint">
+    <span class="hint-icon">☕</span>
+    <span>원두 정보 보기</span>
   </div>
 
   <!-- 팝업 백드롭 -->
