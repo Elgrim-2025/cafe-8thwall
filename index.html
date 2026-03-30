@@ -1,1 +1,250 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Empty Project</title><meta itemprop="name" content="Empty Project"><meta name="twitter:title" content="Empty Project"><meta property="og:title" content="Empty Project"><meta property="og:site_name" content="Empty Project"><meta name="description" content="Start with a blank project."><meta itemprop="description" content="Start with a blank project."><meta property="og:description" content="Start with a blank project."><meta name="twitter:description" content="Start with a blank project."><script crossorigin="anonymous" src="./external/runtime/runtime.js"></script><script crossorigin="anonymous" src="./external/xr/xr.js" async="true" data-preload-chunks="face, slam"></script></head><body><script src="bundle.js"></script></body></html>
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ediya Coffee AR</title>
+  <meta itemprop="name" content="Ediya Coffee AR">
+  <meta name="twitter:title" content="Ediya Coffee AR">
+  <meta property="og:title" content="Ediya Coffee AR">
+  <script crossorigin="anonymous" src="./external/runtime/runtime.js"></script>
+  <script crossorigin="anonymous" src="./external/xr/xr.js" async="true" data-preload-chunks="face, slam"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── 골드 링 인디케이터 ── */
+    #ring-indicator {
+      position: fixed;
+      display: none;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 100;
+    }
+    .ring-pulse {
+      position: absolute;
+      width: 96px;
+      height: 96px;
+      border: 2.5px solid #FFD700;
+      border-radius: 50%;
+      top: 0; left: 0;
+      transform: translate(-50%, -50%);
+      animation: ringPulse 1.8s ease-out infinite;
+    }
+    .ring-pulse:nth-child(2) { animation-delay: 0.6s; }
+    .ring-pulse:nth-child(3) { animation-delay: 1.2s; }
+    @keyframes ringPulse {
+      0%   { transform: translate(-50%,-50%) scale(0.35); opacity: 1; }
+      100% { transform: translate(-50%,-50%) scale(2.4);  opacity: 0; }
+    }
+    .ring-dot {
+      position: absolute;
+      width: 10px; height: 10px;
+      background: #FFD700;
+      border-radius: 50%;
+      top: 0; left: 0;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 8px #FFD700;
+    }
+    .ring-label {
+      position: absolute;
+      top: 56px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #FFD700;
+      font-size: 11px;
+      font-family: -apple-system, sans-serif;
+      white-space: nowrap;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.9);
+    }
+
+    /* ── 팝업 백드롭 ── */
+    #popup-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0);
+      z-index: 200;
+      display: none;
+      transition: background 0.35s;
+    }
+    #popup-backdrop.open {
+      display: block;
+      background: rgba(0,0,0,0.45);
+    }
+
+    /* ── 브라질 원두 팝업 ── */
+    #origin-popup {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: #213A7F;
+      border-radius: 24px 24px 0 0;
+      padding: 16px 22px 44px;
+      color: #fff;
+      transform: translateY(100%);
+      transition: transform 0.42s cubic-bezier(0.32, 0.72, 0, 1);
+      z-index: 300;
+      max-height: 78vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    #origin-popup.open { transform: translateY(0); }
+
+    .popup-handle {
+      width: 36px; height: 4px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 2px;
+      margin: 0 auto 14px;
+    }
+    .popup-close {
+      position: absolute;
+      top: 18px; right: 18px;
+      background: rgba(255,255,255,0.12);
+      border: none; color: #fff;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      font-size: 15px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .country-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .country-flag { font-size: 42px; line-height: 1; }
+    .country-name {
+      font-size: 24px; font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+    .country-region {
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      margin-top: 3px;
+    }
+
+    .country-img {
+      width: 100%;
+      border-radius: 14px;
+      margin-bottom: 14px;
+      object-fit: cover;
+      max-height: 150px;
+      display: block;
+    }
+
+    .popup-desc {
+      font-size: 13.5px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.88);
+      margin-bottom: 20px;
+    }
+
+    .flavor-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #FFD700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 12px;
+    }
+    .flavor-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 9px;
+    }
+    .flavor-label {
+      font-size: 12px;
+      width: 44px;
+      color: rgba(255,255,255,0.75);
+      flex-shrink: 0;
+    }
+    .flavor-track {
+      flex: 1; height: 5px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .flavor-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #FFD700, #FFA500);
+      border-radius: 3px;
+    }
+
+    .roast-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 18px;
+      padding: 7px 16px;
+      background: rgba(255,215,0,0.12);
+      border: 1px solid rgba(255,215,0,0.5);
+      color: #FFD700;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 골드 링 인디케이터 -->
+  <div id="ring-indicator">
+    <div class="ring-pulse"></div>
+    <div class="ring-pulse"></div>
+    <div class="ring-pulse"></div>
+    <div class="ring-dot"></div>
+    <span class="ring-label">탭하세요</span>
+  </div>
+
+  <!-- 팝업 백드롭 -->
+  <div id="popup-backdrop"></div>
+
+  <!-- 브라질 원두 정보 팝업 -->
+  <div id="origin-popup">
+    <div class="popup-handle"></div>
+    <button class="popup-close" id="close-popup">✕</button>
+
+    <div class="country-header">
+      <span class="country-flag">🇧🇷</span>
+      <div>
+        <h2 class="country-name">브라질</h2>
+        <p class="country-region">미나스 제라이스 주 · 세하도 지역</p>
+      </div>
+    </div>
+
+    <img src="assets/brazil.png" alt="Brazil Coffee" class="country-img"/>
+
+    <p class="popup-desc">
+      SAMPLE 세계 최대 커피 생산국으로, 달콤하고 부드러운 풍미가 특징입니다.
+      낮은 산미와 풍부한 바디감으로 에스프레소 블렌드의 베이스로 널리 사용되며,
+      견과류와 다크초콜릿의 향이 조화를 이루는 균형 잡힌 맛을 자랑합니다.
+    </p>
+
+    <p class="flavor-title">풍미 프로필</p>
+
+    <div class="flavor-row">
+      <span class="flavor-label">산미</span>
+      <div class="flavor-track"><div class="flavor-fill" style="width:28%"></div></div>
+    </div>
+    <div class="flavor-row">
+      <span class="flavor-label">바디감</span>
+      <div class="flavor-track"><div class="flavor-fill" style="width:82%"></div></div>
+    </div>
+    <div class="flavor-row">
+      <span class="flavor-label">단맛</span>
+      <div class="flavor-track"><div class="flavor-fill" style="width:72%"></div></div>
+    </div>
+    <div class="flavor-row">
+      <span class="flavor-label">향미</span>
+      <div class="flavor-track"><div class="flavor-fill" style="width:68%"></div></div>
+    </div>
+
+    <span class="roast-badge">☕ 미디엄 다크 로스트</span>
+  </div>
+
+  <script src="bundle.js"></script>
+</body>
+</html>
