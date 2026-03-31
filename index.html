@@ -167,6 +167,39 @@
       font-size: 12px;
       font-weight: 600;
     }
+
+    /* ── 객체 위 정보 버튼 ── */
+    #info-btn {
+      position: fixed;
+      display: none;
+      transform: translate(-50%, -100%);
+      margin-top: -16px;
+      background: rgba(33, 58, 127, 0.92);
+      border: 1.5px solid rgba(255, 215, 0, 0.75);
+      color: #fff;
+      padding: 9px 18px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-family: -apple-system, 'Apple SD Gothic Neo', sans-serif;
+      font-weight: 600;
+      z-index: 150;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      white-space: nowrap;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.35);
+      pointer-events: auto;
+    }
+    #info-btn::after {
+      content: '';
+      position: absolute;
+      bottom: -7px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 7px solid transparent;
+      border-top-color: rgba(255, 215, 0, 0.75);
+      border-bottom: none;
+    }
   </style>
 </head>
 <body>
@@ -174,8 +207,11 @@
   <!-- 안내 토스트 -->
   <div id="guide-toast">
     <span class="toast-icon">☕</span>
-    <span>커피를 1초 간 탭하면 원두 정보를 볼 수 있어요</span>
+    <span>버튼을 눌러 원두 정보를 확인해 보세요!</span>
   </div>
+
+  <!-- 객체 위 정보 버튼 -->
+  <button id="info-btn">☕ 원두 정보 보기</button>
 
   <!-- 팝업 백드롭 -->
   <div id="popup-backdrop"></div>
