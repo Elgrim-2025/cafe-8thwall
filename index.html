@@ -168,6 +168,31 @@
       font-weight: 600;
     }
 
+    /* ── 다시 배치하기 버튼 ── */
+    #replace-btn {
+      position: fixed;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: rgba(15, 25, 60, 0.88);
+      border: 1.5px solid rgba(255, 215, 0, 0.6);
+      color: #fff;
+      padding: 13px 28px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-family: -apple-system, 'Apple SD Gothic Neo', sans-serif;
+      font-weight: 600;
+      z-index: 150;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      white-space: nowrap;
+    }
+
   </style>
 </head>
 <body>
@@ -177,6 +202,9 @@
     <span class="toast-icon">☕</span>
     <span>커피를 탭하면 원두 정보를 볼 수 있어요</span>
   </div>
+
+  <!-- 다시 배치하기 버튼 -->
+  <button id="replace-btn">↩ 다시 배치하기</button>
 
   <!-- 팝업 백드롭 -->
   <div id="popup-backdrop"></div>
